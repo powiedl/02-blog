@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comments-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comments
+  template:
+    metadata:
+      labels:
+        app: comments
+    spec:
+      containers:
+        - name: comments
+          #image: powiedl/blog-posts:0.0.2
+          image: powiedl/blog-comments
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-srv
+spec:
+  type: ClusterIP # das ist der Standardwert, d. h. man kann es auch weglassen (aber wir schreiben es, damit man es klarer erkennt)
+  selector:
+    app: comments
+  ports:
+    - name: comments
+      protocol: TCP
+      port: 4001
+      targetPort: 4001

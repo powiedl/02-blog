@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: query
+  template:
+    metadata:
+      labels:
+        app: query
+    spec:
+      containers:
+        - name: query
+          #image: powiedl/blog-posts:0.0.2
+          image: powiedl/blog-query
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  type: ClusterIP # das ist der Standardwert, d. h. man kann es auch weglassen (aber wir schreiben es, damit man es klarer erkennt)
+  selector:
+    app: query
+  ports:
+    - name: query
+      protocol: TCP
+      port: 4002
+      targetPort: 4002

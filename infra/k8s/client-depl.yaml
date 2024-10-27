@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          #image: powiedl/blog-posts:0.0.2
+          image: powiedl/blog-client
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec:
+  type: ClusterIP # das ist der Standardwert, d. h. man kann es auch weglassen (aber wir schreiben es, damit man es klarer erkennt)
+  selector:
+    app: client
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
